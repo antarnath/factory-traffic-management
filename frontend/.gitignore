@@ -1,0 +1,19 @@
+# Frontend-specific ignores. The root .gitignore already covers
+# the common cases (node_modules, .env, dist/, etc.) — this file
+# only adds things that are frontend-specific.
+
+# Local dev artifacts
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.svelte-kit/
+.cache/
+
+# Test outputs
+coverage/
+
+# Editor noise
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,61 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- Virtual env ---
+venv/
+env/
+.venv/
+ENV/
+
+# --- Tests / coverage ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.pyright_cache/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# --- Environment / secrets ---
+.env
+.env.local
+.env.*.local
+
+# --- Database files (SQLite) ---
+*.db
+*.sqlite
+*.sqlite3
+
+# --- IDE / editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Build / dist ---
+build/
+dist/
+*.egg-info/
+*.egg
+html/
+site/
+
+# --- Migrations autogen scratch ---
+alembic/versions/__pycache__/
+
+# --- Uvicorn / FastAPI dev ---
+__main__.py
