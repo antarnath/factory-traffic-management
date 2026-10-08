@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Factory Traffic — Dashboard</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Factory Traffic <span class="subtitle">Junction Dashboard</span></h1>
+    <div class="topbar-controls">
+      <label>
+        Junction:
+        <input id="junction-id" type="text" value="A" maxlength="16" />
+      </label>
+      <button id="refresh-now" class="btn">Refresh</button>
+      <span id="connection-pill" class="pill pill-unknown">disconnected</span>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- LEFT: intersection -->
+    <section class="card card-intersection">
+      <h2>Intersection <span id="junction-label">A</span></h2>
+      <svg viewBox="0 0 400 400" class="intersection" aria-label="Intersection diagram">
+        <!-- Roads -->
+        <rect x="0"   y="150" width="400" height="100" class="road road-h" />
+        <rect x="150" y="0"   width="100" height="400" class="road road-v" />
+        <!-- Intersection center -->
+        <rect x="150" y="150" width="100" height="100" class="junction-box" />
+
+        <!-- Signal heads: each direction has 3 lights -->
+        <!-- NORTH: incoming from top, lights are above the junction box on the east side of the northbound lane -->
+        <g class="signal signal-north" transform="translate(220, 140)">
+          <rect class="signal-housing" x="-12" y="-30" width="24" height="60" rx="4" />
+          <circle class="light light-red"    cx="0" cy="-18" r="7" data-role="red" />
+          <circle class="light light-yellow" cx="0" cy="0"   r="7" data-role="yellow" />
+          <circle class="light light-green"  cx="0" cy="18"  r="7" data-role="green" />
+        </g>
+        <text class="dir-label" x="220" y="120" text-anchor="middle">NORTH</text>
+
+        <!-- SOUTH: incoming from bottom, lights are below the junction box on the west side of the southbound lane -->
+        <g class="signal signal-south" transform="translate(180, 260)">
+          <rect class="signal-housing" x="-12" y="-30" width="24" height="60" rx="4" />
+          <circle class="light light-red"    cx="0" cy="-18" r="7" data-role="red" />
+          <circle class="light light-yellow" cx="0" cy="0"   r="7" data-role="yellow" />
+          <circle class="light light-green"  cx="0" cy="18"  r="7" data-role="green" />
+        </g>
+        <text class="dir-label" x="180" y="295" text-anchor="middle">SOUTH</text>
+
+        <!-- EAST: incoming from right, lights are right of the junction box on the north side of the eastbound lane -->
+        <g class="signal signal-east" transform="translate(260, 180)">
+          <rect class="signal-housing" x="-30" y="-12" width="60" height="24" rx="4" />
+          <circle class="light light-red"    cx="-18" cy="0" r="7" data-role="red" />
+          <circle class="light light-yellow" cx="0"   cy="0" r="7" data-role="yellow" />
+          <circle class="light light-green"  cx="18"  cy="0" r="7" data-role="green" />
+        </g>
+        <text class="dir-label" x="260" y="135" text-anchor="middle">EAST</text>
+
+        <!-- WEST: incoming from left -->
+        <g class="signal signal-west" transform="translate(140, 220)">
+          <rect class="signal-housing" x="-30" y="-12" width="60" height="24" rx="4" />
+          <circle class="light light-red"    cx="-18" cy="0" r="7" data-role="red" />
+          <circle class="light light-yellow" cx="0"   cy="0" r="7" data-role="yellow" />
+          <circle class="light light-green"  cx="18"  cy="0" r="7" data-role="green" />
+        </g>
+        <text class="dir-label" x="140" y="275" text-anchor="middle">WEST</text>
+      </svg>
+      <div class="legend">
+        <span class="dot dot-red"></span> RED
+        <span class="dot dot-yellow"></span> YELLOW
+        <span class="dot dot-green"></span> GREEN
+        <span class="dot dot-off"></span> off
+      </div>
+    </section>
+
+    <!-- RIGHT: status -->
+    <section class="card card-status">
+      <h2>Status</h2>
+      <div class="status-row">
+        <span class="label">Mode</span>
+        <span id="mode-badge" class="badge badge-automatic">AUTOMATIC</span>
+      </div>
+      <div class="status-row">
+        <span class="label">Phase</span>
+        <span id="phase-value" class="value">—</span>
+      </div>
+      <div class="status-row">
+        <span class="label">Controller</span>
+        <span id="controller-value" class="value">—</span>
+      </div>
+      <div class="status-row">
+        <span class="label">Manual override</span>
+        <span id="manual-flag" class="value">no</span>
+      </div>
+      <div class="status-row">
+        <span class="label">Emergency</span>
+        <span id="emergency-flag" class="value">no</span>
+      </div>
+      <div class="status-row">
+        <span class="label">Pending cmd</span>
+        <span id="pending-cmd" class="value mono small">—</span>
+      </div>
+
+      <h3>Queues (un-cleared vehicles)</h3>
+      <div class="queue-grid">
+        <div class="queue-cell"><span class="dir">N</span><span id="q-N" class="q">0</span></div>
+        <div class="queue-cell"><span class="dir">S</span><span id="q-S" class="q">0</span></div>
+        <div class="queue-cell"><span class="dir">E</span><span id="q-E" class="q">0</span></div>
+        <div class="queue-cell"><span class="dir">W</span><span id="q-W" class="q">0</span></div>
+      </div>
+
+      <h3>Signals (desired → actual)</h3>
+      <table class="signals-table">
+        <thead>
+          <tr><th>Dir</th><th>Desired</th><th>Actual</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>NORTH</td><td id="d-N">—</td><td id="a-N">—</td></tr>
+          <tr><td>SOUTH</td><td id="d-S">—</td><td id="a-S">—</td></tr>
+          <tr><td>EAST</td><td id="d-E">—</td><td id="a-E">—</td></tr>
+          <tr><td>WEST</td><td id="d-W">—</td><td id="a-W">—</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- FULL WIDTH: alerts panel (above manual + sim cards) -->
+    <section class="card card-alerts" id="alerts-card">
+      <h2>Alerts <span id="alerts-summary" class="muted small">— checking —</span></h2>
+      <ul id="alerts-list" class="alerts-list">
+        <li class="alert alert-ok"><span class="alert-dot"></span>Loading…</li>
+      </ul>
+    </section>
+
+    <!-- BOTTOM-LEFT: manual controls -->
+    <section class="card card-manual">
+      <h2>Manual control</h2>
+      <div class="btn-row">
+        <button class="btn btn-dir" data-dir="NORTH">Force NORTH green</button>
+        <button class="btn btn-dir" data-dir="SOUTH">Force SOUTH green</button>
+        <button class="btn btn-dir" data-dir="EAST">Force EAST green</button>
+        <button class="btn btn-dir" data-dir="WEST">Force WEST green</button>
+      </div>
+      <div class="btn-row">
+        <button id="btn-return-auto" class="btn btn-secondary">Return to AUTOMATIC</button>
+      </div>
+      <p class="muted">Override expires automatically after 60s.</p>
+    </section>
+
+    <!-- BOTTOM-RIGHT: simulation form -->
+    <section class="card card-sim">
+      <h2>Simulate event</h2>
+
+      <div class="form-block">
+        <h3>Vehicle event</h3>
+        <div class="form-row">
+          <label>Type
+            <select id="veh-type">
+              <option>VEHICLE_ARRIVED</option>
+              <option>VEHICLE_CLEARED</option>
+            </select>
+          </label>
+          <label>Direction
+            <select id="veh-dir">
+              <option>NORTH</option><option>SOUTH</option>
+              <option>EAST</option><option>WEST</option>
+            </select>
+          </label>
+          <label>Vehicle type
+            <select id="veh-vtype">
+              <option>TRUCK</option>
+              <option>FORKLIFT</option>
+              <option>EMPLOYEE_VEHICLE</option>
+              <option>EMERGENCY</option>
+            </select>
+          </label>
+          <label>Vehicle ID
+            <input id="veh-vid" type="text" value="v1" />
+          </label>
+          <label>Sequence #
+            <input id="veh-seq" type="number" value="1" min="1" />
+          </label>
+          <button id="btn-send-vehicle" class="btn">Send</button>
+        </div>
+      </div>
+
+      <div class="form-block">
+        <h3>Device event</h3>
+        <div class="form-row">
+          <label>Device
+            <select id="dev-type">
+              <option>SIGNAL_CONTROLLER</option>
+              <option>SIGNAL</option>
+              <option>SENSOR</option>
+            </select>
+          </label>
+          <label>Status
+            <select id="dev-status">
+              <option>ONLINE</option>
+              <option>OFFLINE</option>
+              <option>DEGRADED</option>
+              <option>WARNING</option>
+            </select>
+          </label>
+          <button id="btn-send-device" class="btn">Send</button>
+        </div>
+      </div>
+
+      <div class="form-block">
+        <h3>Controller ACK</h3>
+        <p class="muted small">
+          Latest pending: <span id="latest-pending" class="mono">—</span>
+        </p>
+        <div class="form-row">
+          <label>Status
+            <select id="ctrl-status">
+              <option>ACK</option>
+              <option>NACK</option>
+              <option>TIMEOUT</option>
+            </select>
+          </label>
+          <label>Actual state
+            <select id="ctrl-actual">
+              <option>RED</option>
+              <option>YELLOW</option>
+              <option>GREEN</option>
+            </select>
+          </label>
+          <button id="btn-send-ack" class="btn">Send ACK</button>
+        </div>
+      </div>
+
+      <div id="toast" class="toast hidden"></div>
+    </section>
+
+    <!-- BOTTOM: activity feed (full width) -->
+    <section class="card card-history">
+      <h2>Recent activity <span class="muted small">(last 20)</span></h2>
+      <ul id="history-list" class="history-list">
+        <li class="muted">Loading…</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+{
+  "info": {
+    "name": "Factory Traffic Management",
+    "description": "REST endpoints for the factory traffic-management assessment. Set the `base_url` collection variable (default: http://127.0.0.1:8000) before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "junction_id",
+      "value": "A",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Meta",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Junctions",
+      "item": [
+        {
+          "name": "List junctions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/junctions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions"]
+            }
+          }
+        },
+        {
+          "name": "Get one junction",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/junctions/{{junction_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions", "{{junction_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Create junction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": \"A\", \"name\": \"Main Junction\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/junctions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions"]
+            }
+          }
+        },
+        {
+          "name": "Get status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/junctions/{{junction_id}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions", "{{junction_id}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "Force a decision cycle",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/junctions/{{junction_id}}/step",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions", "{{junction_id}}", "step"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Vehicle arrived (NORTH)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\": \"e-v1-arr\", \"junction_id\": \"{{junction_id}}\", \"direction\": \"NORTH\", \"event_type\": \"VEHICLE_ARRIVED\", \"vehicle_id\": \"v1\", \"vehicle_type\": \"TRUCK\", \"sequence_no\": 1, \"timestamp\": \"2026-10-08T12:00:00+00:00\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sensor-events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "sensor-events"]
+            }
+          }
+        },
+        {
+          "name": "Vehicle cleared (NORTH)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\": \"e-v1-clr\", \"junction_id\": \"{{junction_id}}\", \"direction\": \"NORTH\", \"event_type\": \"VEHICLE_CLEARED\", \"vehicle_id\": \"v1\", \"vehicle_type\": \"TRUCK\", \"sequence_no\": 2, \"timestamp\": \"2026-10-08T12:00:05+00:00\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sensor-events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "sensor-events"]
+            }
+          }
+        },
+        {
+          "name": "Emergency (preempts everything)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\": \"e-amb-arr\", \"junction_id\": \"{{junction_id}}\", \"direction\": \"EAST\", \"event_type\": \"VEHICLE_ARRIVED\", \"vehicle_id\": \"amb-1\", \"vehicle_type\": \"EMERGENCY\", \"sequence_no\": 99, \"timestamp\": \"2026-10-08T12:00:06+00:00\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sensor-events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "sensor-events"]
+            }
+          }
+        },
+        {
+          "name": "Device offline (controller)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\": \"dev-1\", \"junction_id\": \"{{junction_id}}\", \"device_type\": \"SIGNAL_CONTROLLER\", \"status\": \"OFFLINE\", \"timestamp\": \"2026-10-08T12:00:10+00:00\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/device-events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "device-events"]
+            }
+          }
+        },
+        {
+          "name": "Controller ACK",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"command_id\": \"REPLACE-WITH-REAL-COMMAND-ID\", \"junction_id\": \"{{junction_id}}\", \"status\": \"ACK\", \"actual_state\": \"GREEN\", \"timestamp\": \"2026-10-08T12:00:11+00:00\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/controller-events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "controller-events"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Manual control",
+      "item": [
+        {
+          "name": "Force WEST green",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"command\": \"MANUAL_GREEN_REQUEST\", \"direction\": \"WEST\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/junctions/{{junction_id}}/commands",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions", "{{junction_id}}", "commands"]
+            }
+          }
+        },
+        {
+          "name": "Return to automatic",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"command\": \"RETURN_TO_AUTOMATIC\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/junctions/{{junction_id}}/commands",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions", "{{junction_id}}", "commands"]
+            }
+          }
+        },
+        {
+          "name": "Simulate controller offline (dev)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"offline\": true}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/junctions/{{junction_id}}/simulate-controller",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions", "{{junction_id}}", "simulate-controller"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "History & maintenance",
+      "item": [
+        {
+          "name": "Audit history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/junctions/{{junction_id}}/history?limit=20&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["api", "junctions", "{{junction_id}}", "history"],
+              "query": [
+                {"key": "limit", "value": "20"},
+                {"key": "offset", "value": "0"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Maintenance tick",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/tick",
+              "host": ["{{base_url}}"],
+              "path": ["api", "maintenance", "tick"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scenarios",
+      "description": "End-to-end demos. Run them in order from a clean DB.",
+      "item": [
+        {
+          "name": "Scenario 1: basic flow",
+          "item": [
+            {"name": "1. Create junction", "request": {
+              "method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": {"mode": "raw", "raw": "{\"id\": \"A\", \"name\": \"Main\"}"},
+              "url": {"raw": "{{base_url}}/api/junctions", "host": ["{{base_url}}"], "path": ["api", "junctions"]}
+            }},
+            {"name": "2. NORTH truck arrives", "request": {
+              "method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": {"mode": "raw", "raw": "{\"event_id\": \"s1-n1\", \"junction_id\": \"A\", \"direction\": \"NORTH\", \"event_type\": \"VEHICLE_ARRIVED\", \"vehicle_id\": \"v1\", \"vehicle_type\": \"TRUCK\", \"sequence_no\": 1, \"timestamp\": \"2026-10-08T12:00:00+00:00\"}"},
+              "url": {"raw": "{{base_url}}/api/sensor-events", "host": ["{{base_url}}"], "path": ["api", "sensor-events"]}
+            }},
+            {"name": "3. Check status (should show NORTH queued)", "request": {
+              "method": "GET", "header": [],
+              "url": {"raw": "{{base_url}}/api/junctions/A/status", "host": ["{{base_url}}"], "path": ["api", "junctions", "A", "status"]}
+            }}
+          ]
+        },
+        {
+          "name": "Scenario 2: emergency preempts",
+          "item": [
+            {"name": "1. Stack EAST with trucks", "request": {
+              "method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": {"mode": "raw", "raw": "{\"event_id\": \"s2-e1\", \"junction_id\": \"A\", \"direction\": \"EAST\", \"event_type\": \"VEHICLE_ARRIVED\", \"vehicle_id\": \"t1\", \"vehicle_type\": \"TRUCK\", \"sequence_no\": 10, \"timestamp\": \"2026-10-08T12:00:00+00:00\"}"},
+              "url": {"raw": "{{base_url}}/api/sensor-events", "host": ["{{base_url}}"], "path": ["api", "sensor-events"]}
+            }},
+            {"name": "2. Emergency arrives on SOUTH", "request": {
+              "method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": {"mode": "raw", "raw": "{\"event_id\": \"s2-amb\", \"junction_id\": \"A\", \"direction\": \"SOUTH\", \"event_type\": \"VEHICLE_ARRIVED\", \"vehicle_id\": \"amb\", \"vehicle_type\": \"EMERGENCY\", \"sequence_no\": 11, \"timestamp\": \"2026-10-08T12:00:01+00:00\"}"},
+              "url": {"raw": "{{base_url}}/api/sensor-events", "host": ["{{base_url}}"], "path": ["api", "sensor-events"]}
+            }},
+            {"name": "3. Status should show mode=EMERGENCY", "request": {
+              "method": "GET", "header": [],
+              "url": {"raw": "{{base_url}}/api/junctions/A/status", "host": ["{{base_url}}"], "path": ["api", "junctions", "A", "status"]}
+            }}
+          ]
+        }
+      ]
+    }
+  ]
+}

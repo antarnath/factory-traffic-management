@@ -90,6 +90,7 @@ def register_exception_handlers(app: FastAPI) -> None:
             "database_error",
             "Database operation failed.",
             status.HTTP_500_INTERNAL_SERVER_ERROR,
+            {"type": type(exc).__name__, "detail": str(exc)[:200]},
         )
 
     @app.exception_handler(Exception)
