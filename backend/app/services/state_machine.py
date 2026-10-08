@@ -11,7 +11,7 @@ This module answers one question for one junction:
 
     Given the current state, what should the system *intend* to do next?
 
-It returns an action descriptor; the orchestrator (Phase 3) is responsible
+It returns an action descriptor; the orchestrator is responsible
 for actually executing it. This split keeps the state machine pure and
 trivially testable.
 """

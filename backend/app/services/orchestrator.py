@@ -1,7 +1,7 @@
 """
 Orchestrator — the single place that wires domain logic to the database.
 
-The Phase 2 services (`safety`, `transitions`, `scheduler`, `state_machine`)
+The domain services (`safety`, `transitions`, `scheduler`, `state_machine`)
 are pure functions. The orchestrator is the *only* module that:
 
   - reads a Junction row,

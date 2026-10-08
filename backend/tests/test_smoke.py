@@ -1,5 +1,5 @@
-"""Phase 1 smoke tests — verify the FastAPI app boots, the error envelope works,
-and basic validation is enforced. No business logic yet (that's Phase 2+)."""
+"""Smoke tests — verify the FastAPI app boots, the error envelope works,
+and basic validation is enforced. No business logic yet."""
 
 
 def test_health_returns_ok(client):
@@ -39,8 +39,9 @@ def test_openapi_metadata(client):
 
 def test_validation_envelope_via_pydantic_directly():
     """Directly assert Pydantic v2 validation errors carry the fields we expect.
-    Full HTTP-level 422 envelope is verified in Phase 3 once /api/sensor-events
-    is wired up — for Phase 1 we just confirm the schema definitions are valid."""
+    The full HTTP-level 422 envelope is verified in the integration
+    tests once /api/sensor-events is wired up — for the smoke test
+    we just confirm the schema definitions are valid."""
     from app.schemas import VehicleEventIn
 
     # Valid event

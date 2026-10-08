@@ -1,5 +1,5 @@
 """
-Phase 2 domain-logic tests.
+Domain-logic tests for the traffic-control services.
 
 These are *pure* tests — no DB, no HTTP, no TestClient. They prove the
 traffic brain works in isolation, satisfying spec §16 ("core traffic

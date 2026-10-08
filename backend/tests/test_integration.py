@@ -326,7 +326,7 @@ def test_pending_command_404_for_unknown_junction(client):
 
 
 # -------------------------------------------------------------------------
-#  Static mount (Phase 5 frontend)
+#  Static mount (frontend dashboard)
 # -------------------------------------------------------------------------
 
 def test_dashboard_index_served(client):
@@ -378,7 +378,7 @@ def test_manual_override_expires(client):
 
 
 # -------------------------------------------------------------------------
-#  Alerts panel (Phase 5 §14.6)
+#  Alerts panel (spec §14.6)
 #
 #  The frontend alerts panel is rendered from the status payload. These
 #  tests verify that the status payload carries the fields the alerts

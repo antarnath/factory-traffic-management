@@ -7,16 +7,16 @@ admin overrides, handles emergency vehicles, and survives device failures.
 
 ## Status
 
-All four implementation phases are complete and **52 tests pass**:
+All four implementation milestones are complete and **67 tests pass**:
 
-- **Phase 1** — Project setup, DB models, Pydantic schemas, error envelope,
+- **Milestone 1** — Project setup, DB models, Pydantic schemas, error envelope,
   smoke tests, Alembic migrations, seed script.
-- **Phase 2** — Pure-Python traffic domain logic: safety invariants,
+- **Milestone 2** — Pure-Python traffic domain logic: safety invariants,
   safe transitions, scheduler, state machine. 31 unit tests.
-- **Phase 3** — REST endpoints, sensor ingestion, controller adapter,
+- **Milestone 3** — REST endpoints, sensor ingestion, controller adapter,
   orchestrator, status, manual override, timeouts, reconciliation,
   recovery. 15 integration tests covering all 9 spec scenarios.
-- **Phase 4** — Maintenance tick, recovery script, postman collection,
+- **Milestone 4** — Maintenance tick, recovery script, postman collection,
   README, per-test isolation, end-to-end demo.
 
 Run `cd backend && pytest -q` to verify.
@@ -62,14 +62,14 @@ See `backend/README.md` for the full backend reference.
 
 ## Implementation plan
 
-The work is split into 4 phases — see `phases/`:
+The work is split into 4 milestones — see `phases/`:
 
-1. **Phase 1** — Project setup, DB models, Pydantic schemas, error envelope,
+1. **Milestone 1** — Project setup, DB models, Pydantic schemas, error envelope,
    smoke tests, Alembic migrations, seed script.
-2. **Phase 2** — Pure-Python traffic domain logic: safety invariants,
+2. **Milestone 2** — Pure-Python traffic domain logic: safety invariants,
    safe transitions, scheduler, state machine.
-3. **Phase 3** — REST endpoints, sensor ingestion, controller adapter.
-4. **Phase 4** — Manual overrides, audit, recovery, concurrency tests, README.
+3. **Milestone 3** — REST endpoints, sensor ingestion, controller adapter.
+4. **Milestone 4** — Manual overrides, audit, recovery, concurrency tests, README.
 
 ## Frontend
 

@@ -130,16 +130,16 @@ collection with one request per endpoint and a few scripted scenarios
 Postman, set the `base_url` variable to `http://127.0.0.1:8000`, and
 run "Run collection" against a running backend.
 
-## Phase status
+## Milestone status
 
-- [x] **Phase 1** — Project setup, DB models, Pydantic schemas, error handling,
+- [x] **Milestone 1** — Project setup, DB models, Pydantic schemas, error handling,
       smoke tests, Alembic migrations, seed script.
-- [x] **Phase 2** — Pure-Python traffic domain logic (safety, transitions,
+- [x] **Milestone 2** — Pure-Python traffic domain logic (safety, transitions,
       scheduler, state machine). 31 unit tests.
-- [x] **Phase 3** — REST endpoints, sensor ingestion, controller adapter,
+- [x] **Milestone 3** — REST endpoints, sensor ingestion, controller adapter,
       orchestrator, status, manual override, timeouts, reconciliation, recovery.
       15 integration tests covering all 9 spec scenarios.
-- [x] **Phase 4** — Maintenance tick, recovery script, postman collection,
+- [x] **Milestone 4** — Maintenance tick, recovery script, postman collection,
       README, updated conftest with per-test isolation.
 
 ## Error envelope
